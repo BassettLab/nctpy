@@ -13,9 +13,9 @@ setuptools.setup(
     description="Python implementation of concepts from network control theory",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/BassettLab/nctpy",
+    url="https://github.com/LindenParkesLab/nctpy",
     project_urls={
-        "Bug Tracker": "https://github.com/BassettLab/nctpy/issues",
+        "Bug Tracker": "https://github.com/LindenParkesLab/nctpy/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
