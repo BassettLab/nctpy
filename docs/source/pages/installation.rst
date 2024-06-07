@@ -19,7 +19,7 @@ This package requires Python 3.9. Assuming you have the correct version of Pytho
 GitHub installation
 ===================
 
-Alternatively, you can install the most up-to-date version of from GitHub:
+Alternatively, you can install the most up-to-date version of ``nctpy`` from GitHub:
 
 .. code-block:: bash
 
