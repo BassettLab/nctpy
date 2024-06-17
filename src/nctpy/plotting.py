@@ -1,4 +1,4 @@
-import os, platform
+import os, sys, platform
 import numpy as np
 import scipy as sp
 import nibabel as nib
@@ -12,7 +12,7 @@ from nctpy.utils import get_p_val_string
 
 
 def set_plotting_params(format='png'):
-    if platform.system() == 'Darwin':
+    if platform.system == 'darwin':
         os.system('rm -rf ~/.cache/matplotlib')
     plt.rcParams['pdf.fonttype'] = 42
     plt.rcParams['ps.fonttype'] = 42
@@ -20,7 +20,7 @@ def set_plotting_params(format='png'):
     plt.rcParams['font.size'] = 10
 
     plt.rcParams['svg.fonttype'] = 'none'
-    sns.set(style='white', context='paper', font_scale=1, font='Helvetica')
+    sns.set_style(style='white')
 
 
 def reg_plot(x, y, xlabel, ylabel, ax, c='gray', annotate='pearson', regr_line=True, kde=True, fontsize=8):
