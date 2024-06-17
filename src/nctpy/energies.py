@@ -121,6 +121,8 @@ def get_control_inputs(A_norm, T, B, x0, xf, system=None, rho=1, S='identity', x
             xr = xf
         elif xr == 'zero':
             xr = np.zeros((n_nodes, 1))
+        elif xr == 'midpoint':
+            xr = x0 + ((xf - x0) * 0.5)
     else:
         if xr.ndim == 1:
             xr = xr.reshape(-1, 1)
