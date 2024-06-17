@@ -64,9 +64,14 @@ class ComputeControlEnergy():
             else:
                 S = control_task['S']
 
+            if 'xr' in control_task:
+                xr = control_task['xr']
+            else:
+                xr = 'zero'
+
             _, u, _ = get_control_inputs(A_norm=self.A_norm, T=self.T, B=control_task['B'],
                                          x0=control_task['x0'], xf=control_task['xf'], system=self.system,
-                                         rho=control_task['rho'], S=S)
+                                         rho=control_task['rho'], S=S, xr=xr)
 
             # get energy
             e = integrate_u(u)
