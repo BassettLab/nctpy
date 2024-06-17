@@ -17,14 +17,25 @@ def set_plotting_params(format='png'):
     plt.rcParams['pdf.fonttype'] = 42
     plt.rcParams['ps.fonttype'] = 42
     plt.rcParams['savefig.format'] = format
-    plt.rcParams['font.size'] = 8
+    plt.rcParams['font.size'] = 10
 
     plt.rcParams['svg.fonttype'] = 'none'
-    sns.set(style='whitegrid', context='paper', font_scale=1, font='Helvetica')
+    sns.set(style='white', context='paper', font_scale=1, font='Helvetica')
 
 
-def reg_plot(x, y, xlabel, ylabel, ax, c='gray', add_spearman=False, kdeplot=True, regplot=True):
-    if x.shape == y.shape:
+def reg_plot(x, y, xlabel, ylabel, ax, c='gray', annotate='pearson', regr_line=True, kde=True, fontsize=8):
+    if len(x.shape) > 1 and len(y.shape) > 1:
+        if x.shape[0] == x.shape[1] and y.shape[0] == y.shape[1]:
+            mask_x = ~np.eye(x.shape[0], dtype=bool) * ~np.isnan(x)
+            mask_y = ~np.eye(y.shape[0], dtype=bool) * ~np.isnan(y)
+            mask = mask_x * mask_y
+            indices = np.where(mask)
+        else:
+            mask_x = ~np.isnan(x)
+            mask_y = ~np.isnan(y)
+            mask = mask_x * mask_y
+            indices = np.where(mask)
+    elif len(x.shape) == 1 and len(y.shape) == 1:
         mask_x = ~np.isnan(x)
         mask_y = ~np.isnan(y)
         mask = mask_x * mask_y
@@ -43,37 +54,57 @@ def reg_plot(x, y, xlabel, ylabel, ax, c='gray', add_spearman=False, kdeplot=Tru
     except:
         pass
 
-    color_blue = sns.color_palette("Set1")[1]
-    if kdeplot:
+    # kde plot
+    if kde == True:
         try:
             sns.kdeplot(x=x, y=y, ax=ax, color='gray', thresh=0.05, alpha=0.25)
         except:
             pass
 
-    if regplot:
+    # regression line
+    if regr_line == True:
+        color_blue = sns.color_palette("Set1")[1]
         sns.regplot(x=x, y=y, ax=ax, scatter=False, color=color_blue)
 
+    # scatter plot
     if type(c) == str:
         ax.scatter(x=x, y=y, c=c, s=5, alpha=0.5)
     else:
         ax.scatter(x=x, y=y, c=c, cmap='viridis', s=5, alpha=0.5)
-    ax.set_xlabel(xlabel, labelpad=-0.5)
-    ax.set_ylabel(ylabel, labelpad=-0.5)
-    ax.tick_params(pad=-2.5)
-    ax.grid(False)
-    sns.despine(right=True, top=True, ax=ax)
+
+    # axis options
+    ax.set_xlabel(xlabel, labelpad=0)
+    ax.set_ylabel(ylabel, labelpad=0)
+    # ax.tick_params(pad=-2.5)
+    # ax.grid(False)
+    # sns.despine(right=True, top=True, ax=ax)
+    sns.despine(offset=0, trim=False, left=False, right=True, top=True, bottom=False, ax=ax)
+    ax.tick_params(left=True, bottom=True)
+
+    # annotation
     r, r_p = sp.stats.pearsonr(x, y)
-    if add_spearman:
-        rho, rho_p = sp.stats.spearmanr(x, y)
-        textstr = '$\mathit{:}$ = {:.2f}, {:}\n$\\rho$ = {:.2f}, {:}' \
-            .format('{r}', r, get_p_val_string(r_p), rho, get_p_val_string(rho_p))
-        ax.text(0.05, 0.975, textstr, transform=ax.transAxes,
-                verticalalignment='top')
+    rho, rho_p = sp.stats.spearmanr(x, y)
+    if type(annotate) == str:
+        if annotate == 'pearson':
+            textstr = '$\mathit{:}$ = {:.2f}, {:}'.format('{r}', r, get_p_val_string(r_p))
+            ax.text(0.05, 0.975, textstr, transform=ax.transAxes, fontsize=fontsize,
+                    verticalalignment='top')
+        elif annotate == 'spearman':
+            textstr = '$\\rho$ = {:.2f}, {:}'.format(rho, get_p_val_string(rho_p))
+            ax.text(0.05, 0.975, textstr, transform=ax.transAxes, fontsize=fontsize,
+                    verticalalignment='top')
+        elif annotate == 'both':
+            textstr = '$\mathit{:}$ = {:.2f}, {:}\n$\\rho$ = {:.2f}, {:}'.format('{r}', r, get_p_val_string(r_p),
+                                                                                 rho, get_p_val_string(rho_p))
+            ax.text(0.05, 0.975, textstr, transform=ax.transAxes, fontsize=fontsize,
+                    verticalalignment='top')
+    elif type(annotate) == tuple:
+        coef = annotate[0]
+        p = annotate[1]
+        textstr = 'coef = {:.2f}, {:}'.format(coef, get_p_val_string(p))
+        ax.text(0.05, 0.975, textstr, transform=ax.transAxes, fontsize=fontsize, verticalalignment='top')
     else:
-        textstr = '$\mathit{:}$ = {:.2f}, {:}' \
-            .format('{r}', r, get_p_val_string(r_p))
-        ax.text(0.05, 0.975, textstr, transform=ax.transAxes,
-                verticalalignment='top')
+        pass
 
 
 def null_plot(observed, null, xlabel, ax, p_val=None):
@@ -86,7 +117,7 @@ def null_plot(observed, null, xlabel, ax, p_val=None):
     ax.set_xlabel(xlabel)
     ax.set_ylabel('counts')
 
-    textstr = 'obs. = {:.2f}'.format(observed)
+    textstr = 'obs. = {:.0f}'.format(observed)
     ax.text(observed, ax.get_ylim()[1], textstr,
             horizontalalignment='left', verticalalignment='top',
             rotation=270, c=color_blue)
