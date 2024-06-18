@@ -25,8 +25,8 @@ states, by means of internal or external control input?
 common NCT analyses reported in the literature. Below, we list select publications that serve as a primer for
 these tools and their use cases:
 
-1. Parkes, L., Kim, J. Z., et al. Using network control theory to study the dynamics of the structural connectome.
-bioRxiv (2023). https://www.biorxiv.org/content/10.1101/2023.08.23.554519v1
+1. Parkes, L., Kim, J. Z., et al. A network control theory pipeline for studying the dynamics of the structural connectome. 
+In press at Nature Protocols (2024). https://www.biorxiv.org/content/10.1101/2023.08.23.554519v1
 
 2. Karrer, T. M., Kim, J. Z., Stiso, J. et al. A practical guide to methodological considerations in the
 controllability of structural brain networks.
