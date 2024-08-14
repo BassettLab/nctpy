@@ -12,7 +12,6 @@ Theodore D. Satterthwaite
 Dani S. Bassett
 
 <!-- ### Analytic Replicator -->
-<!-- Jason Z. Kim -->
 
 ### Collaborators 
 Jennifer Stiso, Julia K Brynildsen, Matthew Cieslak, Sydney Covitz, Raquel E Gur, Ruben C Gur, Fabio Pasqualetti, Russell T Shinohara, Dale Zhou
